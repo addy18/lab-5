@@ -155,67 +155,85 @@ def heap_sort(a_lst):
 
 
 def frequent(string, k):
-    dict = {}
+     dict = {}
     alist = list()
+    words = list()
     word_and_value = list()
     same_value = list()
     visited = set()
 
+    # puts the string of words into dictionary then is sorted in a heap sort
     for i in range(len(string)):
         if string[i] in dict:
             dict[string[i]] += 1
         else:
             dict[string[i]] = 1
-    for key, value in dict.items():
+    for word, value in dict.items():
         alist.append(value)
     heap_sort(alist)
     print("dictionary", dict)
-    print("alist", alist)
+    # print("alist", alist)
 
-
-
-    i = 0
-    for j in dict:
-        if alist[i] == dict[j]:
-            same_value.append(j)
-            visited.add(j)
-            i += 1
-    while i < len(alist):
-        same_value.sort()
-        for m in range(len(same_value)):
-            word_and_value.append(same_value[m])
-        same_value.clear()
-        for k in dict:
-            if alist[i] == dict[k]:
-                same_value.append(k)
-                visited.add(k)
-                i += 1
-
-    if len(same_value) != 0:
-        same_value.sort()
-        for g in range(len(same_value)):
-            word_and_value.append(same_value[g])
+    # checks if k is valid
     if k > len(alist) or k < 0:
-        print("error")
+        print("error k is bigger than the string of words")
         return
+
+    for value in alist:
+        for word, key in dict.items():
+            # looks for words with the same number of occurrences
+            if value == key and word not in visited:
+                same_value.append(word)
+                visited.add(word)
+        same_value.sort()
+        # sorts into heap
+        for m in range(len(same_value)):
+            word_and_value.insert(-2, (same_value[m], value)) # -2
+            words.append(same_value[m])
+        same_value.clear()
+
+    # print("word and value", word_and_value)
+    # print("words", words)
+
     for i in range(k):
         print(word_and_value[i])
+        # print(words[i])
 
 
 def main():
-    a = LRU(4)
+    a = LRU(3)
     a.put("A", 2)
     a.put("B", 3)
     a.put("C", 9)
     a.put("D", 10)
     a.put("E", 130)
+
+    a1 = LRU(4)
+    a1.put("add", 5)
+    a1.put("bob", 6)
+    a1.put("hill", 8)
+    a1.put("love", 10)
+    a1.put("princess", 100)
+    a1.put("hi", 24)
+    a1.put("dog", 78)
+
     print("PART A -----------------")
+    print("TEST ONE")
     a.print()
+    print("\nTEST TWO")
+    a1.print()
     print("------------------------")
 
-    print("PART B -----------------")
     s = ["hi", "heloo", "lol", "hiosd", "hiosd", "lol", "hello", "dog", "dog", "dog", "dog", "dog"]
-    frequent(s, 2)
+    s2 = ["adds", "lol", "cat", "cat", "dog", "jax", "jax", "jax", "lol", "dog", "dog", "lol"]
+
+    print("PART B -----------------")
+    print("TEST ONE")
+    frequent(s, 8)
+
+    print("\nTEST 2")
+    frequent(s2, 4)
+    print("------------------------")
 
 
 main()
